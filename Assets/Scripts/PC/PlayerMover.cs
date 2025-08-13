@@ -12,7 +12,7 @@ public class PlayerMover : MonoBehaviour
     private float yaw = 0f;
     private float pitch = 0f;
 
-
+    Vector2 v2;
     Vector3 dir;
     bool isBoosting = false;
 
@@ -26,19 +26,17 @@ public class PlayerMover : MonoBehaviour
     void Update()
     {
         float speed = (isBoosting) ? moveSpeed * boostFactor : moveSpeed;
-        transform.position += dir * speed * Time.deltaTime;
+        transform.position += (transform.forward * v2.y + transform.right * v2.x).normalized * speed * Time.deltaTime;
     }
 
     void OnMove(InputValue value)
     {
-        Vector2 v2 = value.Get<Vector2>();
-        dir = (transform.forward * v2.y + transform.right * v2.x).normalized;
+        v2 = value.Get<Vector2>();
     }
 
     void OnBoost(InputValue value)
     {
         isBoosting = value.Get<float>() > 0.5f;
-        Debug.Log("isBoosting");
     }
 
     void OnLook(InputValue value)
