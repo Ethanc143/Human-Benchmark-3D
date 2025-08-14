@@ -6,14 +6,31 @@ public class ObjectResizer : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private float h = 0f;
     private float baseOffset = .1f;
+    private float debounce = .2f;
+    private float currDebounce = 0f;
     void Start()
     {
         SetHeight();
     }
+
+    private void Update()
+    {
+        currDebounce += Time.deltaTime;
+    }
+
     private void OnMouseDown()
     {
-        h = (h + 1) % 4;
-        SetHeight();
+        ToggleHeight();
+    }
+
+    public void ToggleHeight()
+    {
+        if (currDebounce >= debounce)
+        {
+            currDebounce = 0f;
+            h = (h + 1) % 4;
+            SetHeight();
+        }
     }
 
     private void SetHeight()

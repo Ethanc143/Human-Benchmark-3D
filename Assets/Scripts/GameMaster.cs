@@ -46,6 +46,7 @@ public class GameMaster : MonoBehaviour
     private const string DATABASE_URL = "https://human-benchmark-database-default-rtdb.firebaseio.com/"; 
     private List<int> scores = new List<int>();
     private bool baby = false;
+    [SerializeField] private string dataName = "scores";
 
     void Start()
     {
@@ -267,7 +268,7 @@ public class GameMaster : MonoBehaviour
     private IEnumerator LogScores()
     {
         string json = "{\"score\": " + level + "}";
-        string url = $"{DATABASE_URL}/scores.json";
+        string url = $"{DATABASE_URL}/{dataName}.json";
         using var req = new UnityWebRequest(url, "POST");
         byte[] body = System.Text.Encoding.UTF8.GetBytes(json);
         req.uploadHandler = new UploadHandlerRaw(body);
@@ -279,7 +280,7 @@ public class GameMaster : MonoBehaviour
 
     private IEnumerator GetScores()
     {
-        using var req = UnityWebRequest.Get($"{DATABASE_URL}/scores.json");
+        using var req = UnityWebRequest.Get($"{DATABASE_URL}/{dataName}.json");
         yield return req.SendWebRequest();
         if (req.result != UnityWebRequest.Result.Success)
         {

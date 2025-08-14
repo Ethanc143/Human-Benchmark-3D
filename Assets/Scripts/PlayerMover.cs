@@ -9,6 +9,8 @@ public class PlayerMover : MonoBehaviour
     [SerializeField] private float moveSpeed = 10f;   
     [SerializeField] private float boostFactor = 4f;    
 
+    [SerializeField] private Transform cameraTransform; 
+
     private float yaw = 0f;
     private float pitch = 0f;
 
@@ -26,7 +28,11 @@ public class PlayerMover : MonoBehaviour
     void Update()
     {
         float speed = (isBoosting) ? moveSpeed * boostFactor : moveSpeed;
-        transform.position += (transform.forward * v2.y + transform.right * v2.x).normalized * speed * Time.deltaTime;
+        if (cameraTransform == null)
+        {
+            cameraTransform = transform;
+        }
+        transform.position += (cameraTransform.forward * v2.y + cameraTransform.right * v2.x).normalized * speed * Time.deltaTime;
     }
 
     void OnMove(InputValue value)
